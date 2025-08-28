@@ -7,15 +7,6 @@ body {
     background-color: var(--black);
 }
 
-#tracking-section {
-    opacity: 0;
-    transition: opacity 0.5s ease;
-}
-
-#tracking-section.loaded {
-    opacity: 1;
-}
-
 .container {
     max-width: 1200px;
     margin: 0 auto;

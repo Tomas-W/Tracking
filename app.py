@@ -60,24 +60,17 @@ def configure_app(app):
             if "image/" in content_type:
                 response.headers["X-Cache-Debug"] = f"max-age={CFG.STATIC_CACHE_DURATION}"
         
-        # HTML and CSS - disable caching
-        elif "text/html" in content_type or "text/css" in content_type:
-            response.cache_control.no_store = True
-            response.cache_control.no_cache = True
-            response.cache_control.max_age = 0
-            response.expires = 0
-        
         # HTML and CSS - enable caching
-        # elif "text/html" in content_type or "text/css" in content_type:
-        #     if os.environ.get("FLASK_ENV") != "deploy":
-        #         response.cache_control.public = True
-        #         response.cache_control.max_age = CFG.STATIC_CACHE_DURATION
-        #         response.expires = CFG.STATIC_CACHE_DURATION
-        #     else:
-        #         response.cache_control.no_store = True
-        #         response.cache_control.no_cache = True
-        #         response.cache_control.max_age = 0
-        #         response.expires = 0
+        elif "text/html" in content_type or "text/css" in content_type:
+            if os.environ.get("FLASK_ENV") != "deploy":
+                response.cache_control.public = True
+                response.cache_control.max_age = CFG.STATIC_CACHE_DURATION
+                response.expires = CFG.STATIC_CACHE_DURATION
+            else:
+                response.cache_control.no_store = True
+                response.cache_control.no_cache = True
+                response.cache_control.max_age = 0
+                response.expires = 0
         
         # API responses (JSON, XML) - moderate caching
         elif "application/json" in content_type or "application/xml" in content_type:

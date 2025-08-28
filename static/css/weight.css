@@ -18,7 +18,6 @@
 
 .weight-form {
     display: flex;
-    visibility: visible;
     flex-direction: column;
     width: min(455px, 75vw);
     margin: 0 auto;

@@ -88,12 +88,26 @@ class Upstash:
             print("No Redis credentials found, using in-memory storage")
             return False
     
-    def get_weight_data(self, date: str) -> float:
+    def get_weight_data(self) -> Dict[str, float]:
         """Gets weight data from Redis."""
         if self.redis:
-            return self._get_from_redis(WEIGHT_PREFIX, None)
+            try:
+                keys = self.redis.keys(f"{WEIGHT_PREFIX}*")
+                if keys:
+                    data_dict = {}
+                    for key in sorted(keys):
+                        # Extract date from key (remove prefix)
+                        date = key.replace(WEIGHT_PREFIX, "")
+                        weight = self.redis.get(key)
+                        if weight is not None:
+                            data_dict[date] = float(weight)
+                    return data_dict
+                return {}
+            except Exception as e:
+                print(f"Error fetching weight data from Redis: {e}")
+                return {}
         else:
-            return None
+            return {}
     
     def check_weight_data(self, date: str) -> bool:
         """Checks if weight data exists in Redis."""

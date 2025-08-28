@@ -28,6 +28,7 @@ def landing():
             session["form_errors"] = login_form.errors
     
     form_errors = session.pop("form_errors", None)
+    flash("Incorrect credentials")
     return render_template(
         "landing/landing.html",
         login_form=login_form,

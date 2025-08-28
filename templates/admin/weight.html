@@ -3,7 +3,7 @@
 {% block main_content %}
 
 {% block scripts %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/weight.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/weight.css') }}">
 {% endblock %}
 
 <div class="weight-form-wrapper">
@@ -19,7 +19,7 @@
             {% endif %}
 
             <form method="POST" action="" novalidate class="weight-form">
-                
+
                 <div class="form-item">
                     <div class="input-error-wrapper">
                         {{ weight_form.date(class="form-input-field") }}

@@ -42,38 +42,6 @@
         var(--bg-gradient) 900px;
 }
 
-.bg-about-1 {
-    --angle-about: 45deg;
-}
-
-.bg-about-2 {
-    --angle-about: -45deg;
-}
-
-.bg-buy-1 {
-    --angle-buy: 45deg;
-}
-
-.bg-buy-2 {
-    --angle-buy: -45deg;
-}
-
-.bg-roadmap-1 {
-    --angle-roadmap: 205deg;
-}
-
-.bg-roadmap-2 {
-    --angle-roadmap: -5deg;
-}
-
-.bg-tokenomics-1 {
-    --angle-tokenomics: 80deg;
-}
-
-.bg-tokenomics-2 {
-    --angle-tokenomics: -80deg;
-}
-
 a {
     text-decoration: none;
     color: inherit;
