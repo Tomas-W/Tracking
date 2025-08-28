@@ -1,0 +1,78 @@
+.weight-graph {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 35px auto 0 auto;
+    padding: 0 1.5% 0 0.5%;
+    box-sizing: border-box;
+}
+
+.weight-graph-title {
+    margin-bottom: 20px;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.weight-graph-image {
+    display: block;
+    width: calc(100% - 40px);
+    max-width: 1000px;
+    height: auto;
+    margin: 0 auto;
+    background: transparent;
+}
+
+.month-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-column-gap: 50px;
+    grid-row-gap: 30px;
+    margin-top: 50px;
+}
+
+.month-button {
+    display: block;
+    padding: 10px 15px;
+    text-align: center;
+    border-radius: 5px;
+    color: var(--text-unhovered);
+    border: 1px solid var(--text-unhovered);
+    cursor: not-allowed;
+}
+
+.month-button.highlighted {
+    color: var(--text-hovered);
+    cursor: pointer;
+    border: 1px solid var(--text-hovered);
+}
+
+.month-button.highlighted:hover {
+    background-color: var(--white-highlighted);
+}
+
+
+@media (max-width: 576px) {
+    .weight-graph-title {
+        font-size: 18px;
+    }
+    .month-grid {
+        grid-template-columns: repeat(3, 1fr);
+        grid-column-gap: 15px;
+        grid-row-gap: 15px;
+    }
+    .month-button {
+        padding: 7px 10px;
+    }
+}
+
+
+@media (min-width: 576px) and (max-width: 768px) {
+    .weight-graph-title {
+        font-size: 20px;
+    }
+    .month-grid {
+        grid-template-columns: repeat(3, 1fr);
+        grid-column-gap: 30px;
+    }
+}

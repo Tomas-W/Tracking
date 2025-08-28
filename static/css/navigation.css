@@ -1,0 +1,30 @@
+nav {
+    padding: 35px 0;
+    text-align: center;
+    background: var(--black);
+    z-index: 100;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav li {
+    display: inline-block;
+}
+
+.nav-link {
+    margin: 0 15px;
+    font-size: 22px;
+    color: var(--text-white);
+    text-decoration: none;
+}
+
+
+@media (max-width: 768px) {
+    .nav-link {
+        font-size: 16px;
+    }
+}

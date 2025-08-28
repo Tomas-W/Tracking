@@ -3,10 +3,10 @@
 {% block main_content %}
 
 {% block scripts %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/requests.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/requests.css') }}">
 {% endblock %}
 
-    <div class="container content-section" id="tracking-section">
+    <div class="container" id="tracking-section">
         <h1>{{ title }}</h1>
         
         {% if error %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+{% set all_months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] %}
+
+{% block scripts %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home/weight.css') }}">
+{% endblock %}
+
+  <div class="weight-graph">
+    <p class="weight-graph-title">{{ title }}</p>
+    <picture>
+      <source media="(min-width: 768px)" srcset="{{ url_for('static', filename=path_l) }}">
+      <source media="(max-width: 767px)" srcset="{{ url_for('static', filename=path_s) }}">
+      <img src="{{ url_for('static', filename=path_s) }}" alt="Weight Progress Graph" class="weight-graph-image">
+    </picture>
+
+    <div class="month-grid">
+      {% for month in all_months %}
+        {% if month in months2025.keys() %}
+          <a href="{{ url_for('home.weight', month=month) }}" class="month-button highlighted">{{ month }}</a>
+        {% else %}
+          <span class="month-button">{{ month }}</span>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+{% endblock %}

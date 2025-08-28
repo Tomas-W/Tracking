@@ -1,10 +1,11 @@
 :root {
     --black-0: rgba(14, 13, 13, 0);
     --black-100: rgba(14, 13, 13, 1);
+    --white: rgba(255, 255, 255, 1);
+    --white-highlighted: rgba(255, 255, 255, 0.07);
+    --text-white: #bebebe;
+    --text-unhovered: #616161;
     --text-hovered: #ffffff;
-    --text-unhovered-10: rgba(97, 97, 97, 0.1);
-    --text-unhovered-20: rgba(97, 97, 97, 0.2);
-    --text-unhovered-50: rgba(97, 97, 97, 0.5);
     --red: rgba(138, 0, 0, 0.7);
     --green: rgba(20, 90, 0, 0.7);
     --transparent: rgba(0, 0, 0, 0);

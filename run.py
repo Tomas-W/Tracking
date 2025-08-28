@@ -3,7 +3,7 @@ import os
 from app import get_app
 
 from routes.landing.landing_route import landing_bp
-from routes.home.home_route import home_bp
+from routes.home.home_routes import home_bp
 from routes.admin.admin_routes import admin_bp
 
 app = get_app()
