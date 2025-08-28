@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" style="background: #0e0d0d">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% include "inline_css.html" %}
+
+    <!-- Critical CSS loaded directly -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing/landing.css') }}">
+    
+    <!-- Non-critical CSS preloaded -->
+    <!-- <link rel="preload" href="{{ url_for('static', filename='css/home/buy.css') }}" as="style"> -->
+
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon16.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon32.png') }}">
+
+    <title>{% block title %}Track{% endblock %}</title>
+</head>
+
+<body>
+    
+    {% if not login_form %}
+        {% include "navigation.html" %}
+    {% endif %}
+
+    <main>
+        {% block main_content %}{% endblock %}
+    </main>
+
+    <!-- <footer class="content-section" id="site-footer">
+        <p>&copy; 2025 Track. All rights reserved.</p>
+    </footer> -->
+    
+    <script defer src="{{ url_for('static', filename='js/base.js') }}"></script>
+    {% if login_form %}
+        <script defer src="{{ url_for('static', filename='js/landing.js') }}"></script>
+    {% endif %}
+</body>
+</html> 

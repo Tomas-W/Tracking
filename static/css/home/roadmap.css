@@ -1,0 +1,11 @@
+.roadmap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.roadmap_img {
+    width: 856px;
+    height: 898px;
+}

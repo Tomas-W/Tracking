@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+{% block scripts %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/requests.css') }}">
+{% endblock %}
+
+    <div class="container content-section" id="tracking-section">
+        <h1>{{ title }}</h1>
+        
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+        
+        {% if tracking_data %}
+        <div class="tracking-content">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Route</th>
+                        <th>IP Address</th>
+                        <th>Country</th>
+                        <th>Device</th>
+                        <th>Browser</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in tracking_data %}
+                    <tr>
+                        <td>{{ entry.timestamp }}</td>
+                        <td>{{ entry.route }}</td>
+                        <td>{{ entry.ip_address }}</td>
+                        <td>{{ entry.geo_data.country }} ({{ entry.geo_data.country_code }})</td>
+                        <td>{% if entry.device_info %}{{ entry.device_info.device }}{% else %}Unknown{% endif %}</td>
+                        <td>{% if entry.device_info %}{{ entry.device_info.browser }}{% else %}Unknown{% endif %}</td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails('{{ loop.index }}')">Details</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+        </div>
+        
+        <!-- Modal for details -->
+        <div id="detailsModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Detailed Information</h2>
+                <pre id="modalContent"></pre>
+            </div>
+        </div>
+        
+        <script>
+            // Store tracking data in JavaScript
+            var trackingData = JSON.parse('{{ tracking_data|tojson|safe }}');
+            
+            // Modal functionality
+            var modal = document.getElementById("detailsModal");
+            var modalContent = document.getElementById("modalContent");
+            var span = document.getElementsByClassName("close")[0];
+            
+            function showDetails(index) {
+                var entry = trackingData[index - 1];
+                modalContent.textContent = JSON.stringify(entry, null, 2);
+                modal.style.display = "block";
+            }
+            
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+            
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+            // Add tracking section to the list of sections to be progressively loaded
+            document.addEventListener("DOMContentLoaded", function() {
+                // Load tracking CSS
+                const loadCSS = function(href) {
+                    return new Promise((resolve) => {
+                        const link = document.createElement("link");
+                        link.rel = "stylesheet";
+                        link.href = href;
+                        link.onload = () => resolve();
+                        document.head.appendChild(link);
+                    });
+                };
+
+                // Load tracking CSS file
+                loadCSS("/static/css/tracking.css").then(() => {
+                    // Show tracking section after its styles are loaded
+                    const trackingSection = document.getElementById("tracking-section");
+                    if (trackingSection) {
+                        trackingSection.classList.add("loaded");
+                    }
+                });
+            });
+        </script>
+        {% else %}
+        <div class="tracking-content">
+            <p class="no-data">No tracking data available.</p>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

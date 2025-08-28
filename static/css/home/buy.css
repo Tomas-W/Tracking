@@ -1,0 +1,61 @@
+.buy {
+    padding: 35px 325px;
+}
+
+.buy-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 0 75px;
+}
+
+.row-1 {
+    padding: 0 0 100px 0;
+}
+
+.buy-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 300px;
+    height: 100px;
+    gap: 15px;
+    overflow: hidden;
+    background: transparent;
+}
+
+.buy-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 4px;
+    background: var(--text-unhovered);
+    opacity: 0;
+    z-index: 0;
+    transition: opacity 0.4s ease;
+}
+
+.buy-item:hover::before {
+    opacity: 0.1;
+    transition: opacity 0.3s ease,
+                color 0.3s ease;
+}
+
+.buy-item:hover .buy-text {
+    color: var(--text-white);
+}
+
+.buy-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-unhovered);
+    transition: color 0.25s ease;
+}
+
+.buy-img {
+    width: 70px;
+    height: 70px;
+    margin: 0 0 0 25px;
+}

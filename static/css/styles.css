@@ -1,0 +1,103 @@
+.form-item {
+    margin-bottom: 30px;
+}
+
+.input-error-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.form-input-field {
+    flex-grow: 1;
+    width: 100%;
+    height: 50px;
+    padding: 7px 0;
+    border: none;
+    border-bottom: 1px solid var(--text-unhovered);
+    outline: none;
+    font-size: 1rem;
+    color: var(--text-unhovered);
+    background-color: transparent;
+}
+
+.form-input-field:hover {
+    border-bottom-color: var(--text-hovered);
+    color: var(--text-hovered);
+}
+
+
+.form-input-field:not(:placeholder-shown) + .form-label {
+    opacity: 1;
+    visibility: visible;
+}
+
+.form-input-field:not(:placeholder-shown)::placeholder {
+    opacity: 0;
+}
+
+.form-error {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    padding-right: 3px;
+    font-size: 1rem;
+    color: var(--red) !important;
+    white-space: nowrap;
+    transform: translateY(-50%);
+}
+
+.form-label {
+    position: absolute;
+    visibility: hidden;
+    left: 0;
+    top: -5px;
+    padding-right: 3px;
+    font-style: italic;
+    font-size: 1rem;
+    white-space: nowrap;
+    color: var(--text-unhovered);
+    opacity: 0;
+    transform: translateY(-50%);
+}
+
+.form-label-color {
+    color: var(--text-unhovered);
+}
+
+.last-form-item {
+    margin-bottom: 0;
+}
+
+.remember-devider {
+    margin-top: 10px;
+    padding: 0 0 7px 0;
+}
+
+.remember-devider:hover {
+    cursor: pointer;
+}
+
+.form-devider {
+    margin: 0;
+    border-bottom: 1px solid var(--text-unhovered);
+}
+
+.form-devider:hover {
+    border-bottom-color: var(--text-hovered);
+}
+
+.form-btn {
+    width: 100%;
+    margin: 0 auto;
+    padding: 35px 0;
+    border: none;
+    font-size: 1.4rem;
+    color: var(--text-unhovered);
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.form-btn:hover {
+    color: var(--text-hovered);
+}

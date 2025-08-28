@@ -1,0 +1,50 @@
+{% block tokenomics_content %}
+
+{% block scripts %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home/tokenomics.css') }}">
+{% endblock %}
+
+    <div class="tokenomics" id="tokenomics">
+
+        <div class="header box box-top">
+            <p class="tokenomics-text">Total supply</p>
+            <p class="br2"></p>
+            <p class="tokenomics-text">1.000.000.000</p>
+        </div>
+
+        <div class="allocations">
+
+            <div class="public box box-left">
+                <p class="tokenomics-text">Public Sale</p>
+                <p class="br2"></p>
+                <p class="tokenomics-text">90%</p>
+            </div>
+
+
+            <div class="development box">
+                <p class="tokenomics-text">Development</p>
+                <p class="br2"></p>
+                <p class="tokenomics-text">5%</p>
+            </div>
+
+
+            <div class="foundation box">
+                <p class="tokenomics-text">Foundation</p>
+                <p class="br2"></p>
+                <p class="tokenomics-text">3%</p>
+            </div>
+
+
+            <div class="marketing box box-right">
+                <p class="tokenomics-text">Marketing</p>
+                <p class="br2"></p>
+                <p class="tokenomics-text">2%</p>
+            </div>
+
+
+        </div>
+
+    </div>
+{% endblock %}
+
+

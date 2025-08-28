@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+{% block scripts %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/weight.css') }}">
+{% endblock %}
+
+<div class="weight-form-wrapper">
+
+    <div class="weight-header">
+        <h1>Weight</h1>
+    </div>
+
+            {% if get_flashed_messages() %}
+                <div class="weight-flash">
+                    <p>{{ get_flashed_messages()[0] }}</p>
+                </div>
+            {% endif %}
+
+            <form method="POST" action="" novalidate class="weight-form">
+                
+                <div class="form-item">
+                    <div class="input-error-wrapper">
+                        {{ weight_form.date(class="form-input-field") }}
+                        {% if weight_form.errors["date"] %}
+                            <div class="form-error">{{ weight_form.errors["date"][0] }}</div>
+                        {% endif %}
+                        <div class="form-label">{{ weight_form.date.label(class="form-label-color") }}</div>
+                    </div>
+                </div>
+
+                <div class="form-item last-form-item">
+                    <div class="input-error-wrapper">
+                        {{ weight_form.weight(class="form-input-field ") }}
+                        {% if weight_form.errors["weight"] %}
+                            <div class="form-error">{{ weight_form.errors["weight"][0] }}</div>
+                        {% endif %}
+                        <div class="form-label">{{ weight_form.weight.label(class="form-label-color") }}</div>
+                    </div>
+                </div>
+
+                {{ weight_form.form_type }}
+                {{ weight_form.hidden_tag() }}
+                <div class="form-devider"> 
+                    {{ weight_form.submit(class="form-btn") }}
+                </div>
+            </form>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+<div class="login-form-wrapper">
+
+            {% if get_flashed_messages() %}
+                <div class="login-flash">
+                    <p>{{ get_flashed_messages()[0] }}</p>
+                </div>
+            {% endif %}
+
+            <form method="POST" action="" novalidate class="login-form">
+                <div class="form-item">
+                    <div class="input-error-wrapper">
+                        {{ login_form.username(class="form-input-field") }}
+                        {% if login_form.errors["username"] %}
+                            <div class="form-error">{{ login_form.errors["username"][0] }}</div>
+                        {% endif %}
+                        <div class="form-label">{{ login_form.username.label(class="form-label-color") }}</div>
+                    </div>
+                </div>
+
+                <div class="form-item last-form-item">
+                    <div class="input-error-wrapper">
+                        {{ login_form.password(class="form-input-field ") }}
+                        {% if login_form.errors["password"] %}
+                            <div class="form-error">{{ login_form.errors["password"][0] }}</div>
+                        {% endif %}
+                        <div class="form-label">{{ login_form.password.label(class="form-label-color") }}</div>
+                    </div>
+                </div>
+
+                {{ login_form.form_type }}
+                {{ login_form.hidden_tag() }}
+                <div class="form-devider"> 
+                    {{ login_form.submit(class="form-btn") }}
+                </div>
+            </form>
+
+</div>
+
+{% endblock %}
