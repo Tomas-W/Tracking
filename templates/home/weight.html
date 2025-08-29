@@ -19,6 +19,10 @@
       <img src="{{ url_for('static', filename=path_s) }}" alt="Weight Progress Graph" class="weight-graph-image">
     </picture>
 
+    <div class="show-all-container">
+      <a href="{{ url_for('home.weight', month='in') }}" class="month-button highlighted">Show all</a>
+    </div>
+
     <div class="month-grid">
       {% for month in all_months %}
         {% if month in months2025.keys() %}
