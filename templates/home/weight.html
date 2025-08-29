@@ -3,6 +3,7 @@
 {% block main_content %}
 
 {% set all_months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] %}
+{% set all_months_short = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] %}
 
 {% block scripts %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/home/weight.css') }}">
@@ -19,16 +20,19 @@
       <img src="{{ url_for('static', filename=path_s) }}" alt="Weight Progress Graph" class="weight-graph-image">
     </picture>
 
-    <div class="show-all-container">
-      <a href="{{ url_for('home.weight', month='in') }}" class="month-button highlighted">Show all</a>
-    </div>
-
     <div class="month-grid">
+      <a href="{{ url_for('home.weight') }}" class="month-button highlighted show-all-button {% if current_month == None %}is_current_month{% endif %}">Show all</a>
       {% for month in all_months %}
         {% if month in months2025.keys() %}
-          <a href="{{ url_for('home.weight', month=month) }}" class="month-button highlighted">{{ month }}</a>
+          <a href="{{ url_for('home.weight', month=month) }}" class="month-button highlighted {% if month == current_month %}is_current_month{% endif %}">
+            <span class="month-long">{{ month }}</span>
+            <span class="month-short">{{ all_months_short[loop.index0] }}</span>
+          </a>
         {% else %}
-          <span class="month-button">{{ month }}</span>
+          <span class="month-button">
+            <span class="month-long">{{ month }}</span>
+            <span class="month-short">{{ all_months_short[loop.index0] }}</span>
+          </span>
         {% endif %}
       {% endfor %}
     </div>

@@ -12,6 +12,7 @@ from .home_utils import (
 )
 from utils.misc import login_required
 from utils.config import CFG
+from utils.logger import logger
 
 
 home_bp = Blueprint("home", __name__)
@@ -35,7 +36,7 @@ def weight(month=None):
     request_monitor.monitor()
 
     path_s, path_l = get_weight_image_paths(month)
-    title = get_weight_image_title(path_s)
+    title = get_weight_image_title(path_s, month)
     months2025 = get_2025_weight_dict()
 
     return render_template(
@@ -44,4 +45,5 @@ def weight(month=None):
         path_s=path_s,
         path_l=path_l,
         months2025=months2025,
+        current_month=month,
     )

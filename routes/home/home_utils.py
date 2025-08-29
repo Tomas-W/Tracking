@@ -1,3 +1,6 @@
+all_months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+
 def get_2025_weight_dict() -> dict[str, str]:
     """Returns a dictionary of weight image paths for 2025."""
     data = {
@@ -7,18 +10,21 @@ def get_2025_weight_dict() -> dict[str, str]:
     return data
 
 
-def get_weight_image_paths(month: str) -> tuple[str, str]:
+def get_weight_image_paths(month: str | None) -> tuple[str, str]:
     """Returns a tuple of weight image paths for a given month."""
-    if month:
+    if month is None:
+        path_s = "images/weight_2025_s.png"
+        path_l = "images/weight_2025_l.png"
+    
+    else:
         path_s = f"images/weight_{month.lower()}_2025_s.png"
         path_l = f"images/weight_{month.lower()}_2025_l.png"
-    else:
-        path_s = "images/weight_july_2025_s.png"
-        path_l = "images/weight_july_2025_l.png"
     
     return path_s, path_l
 
 
-def get_weight_image_title(path_s: str) -> str:
+def get_weight_image_title(path_s: str, month: str) -> str:
     """Returns the capitalized month of the weight image path."""
-    return " ".join(path_s.split("/")[-1].split("_")[:-1]).title()
+    if month not in all_months:
+        return " ".join(path_s.split("/")[-1].split("_")[1:-1]).title()
+    return " ".join(path_s.split("/")[-1].split("_")[1:-1]).title()

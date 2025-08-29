@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    padding: 0 1.5% 0 0.5%;
+    padding: 0 5%;
     box-sizing: border-box;
 }
 
@@ -21,6 +21,11 @@
     grid-template-columns: repeat(4, 1fr);
     grid-column-gap: 50px;
     grid-row-gap: 30px;
+    margin-top: 50px;
+}
+
+.show-all-button {
+    grid-column: 1 / -1;  /* Spans all columns */
 }
 
 .month-button {
@@ -43,6 +48,11 @@
     background-color: var(--white-highlighted);
 }
 
+.is_current_month {
+    font-weight: bold;
+    background-color: var(--white-highlighted);
+}
+
 .show-all-container {
     max-width: 80%;
     margin-top: 50px;
@@ -53,8 +63,12 @@
     width: 591px;
 }
 
+.month-short {
+    display: none;
+}
 
-@media (max-width: 576px) {
+
+@media (max-width: 425px) {
     .weight-graph-title {
         font-size: 18px;
     }
@@ -64,14 +78,31 @@
         grid-row-gap: 15px;
     }
     .month-button {
-        padding: 7px 10px;
+        padding: 10px 20px;
+        font-size: 16px;
     }
-    .show-all-container .month-button {
-        width: 331px;
+    .month-long {
+        display: none;
     }
-    .show-all-container {
-        margin-bottom: 15px;
+    .month-short {
+        display: inline;
     }
+}
+
+@media (min-width: 425px) and (max-width: 576px) {
+    .weight-graph-title {
+        font-size: 18px;
+    }
+    .month-grid {
+        grid-template-columns: repeat(3, 1fr);
+        grid-column-gap: 15px;
+        grid-row-gap: 15px;
+    }
+    .month-button {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+
 }
 
 
@@ -83,7 +114,5 @@
         grid-template-columns: repeat(3, 1fr);
         grid-column-gap: 30px;
     }
-    .show-all-container .month-button {
-        width: 391px;
-    }
+
 }
