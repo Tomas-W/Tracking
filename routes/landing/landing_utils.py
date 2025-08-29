@@ -9,6 +9,15 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired
 
+from utils.upstash import upstash
+
+
+def check_clear_request(username: str) -> bool:
+    """Clears request data from session."""
+    if username == "clearrequests":
+        upstash.clear_request_data()
+        return True
+    return False
 
 def login_user(username: str) -> None:
     """Adds username to session."""

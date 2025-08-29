@@ -6,8 +6,8 @@
     <div class="login-form-wrapper">
 
         {% if get_flashed_messages() %}
-        <div class="login-flash">
-            <p>{{ get_flashed_messages()[0] }}</p>
+        <div class="flash-wrapper">
+            <p class="flash-text">{{ get_flashed_messages()[0] }}</p>
         </div>
         {% endif %}
 

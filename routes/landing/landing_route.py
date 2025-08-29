@@ -10,7 +10,7 @@ from flask import (
 
 from utils.upstash import upstash
 from utils.request_monitor import request_monitor
-from .landing_utils import LoginForm
+from .landing_utils import LoginForm, check_clear_request
 from utils.logger import logger
 from utils.config import CFG
 
@@ -22,7 +22,7 @@ landing_bp = Blueprint("landing", __name__)
 def landing():
     """Displays login form."""
     request_monitor.monitor()
-    
+
     login_form = LoginForm()
     if request.method == "POST":
         if login_form.validate_on_submit():
@@ -35,7 +35,11 @@ def landing():
             if user is not None and user == password:
                 session["username"] = username
                 next_url = request.args.get("next")
+                if check_clear_request(username):
+                    flash("Requests cleared")
+                    logger.info(f"Requests data cleared")
                 logger.info(f"Logged in: {username=}")
+                flash(f"Welcome {username}")
                 return redirect(next_url or url_for(CFG.redirect.home))
             else:
                 flash("Incorrect credentials")

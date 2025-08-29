@@ -12,16 +12,6 @@
     justify-content: center;
 }
 
-.login-flash {
-    margin-bottom: 20px;
-    text-align: center;
-    font-style: italic;
-}
-
-.login-flash p {
-    font-size: 1.2rem;
-}
-
 .login-form {
     display: flex;
     flex-direction: column;

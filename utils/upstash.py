@@ -1,5 +1,6 @@
 import json
 import os
+import pytz
 
 from datetime import datetime
 from typing import Any, Final
@@ -48,12 +49,13 @@ class Upstash:
         else:
             self._save_request_data_to_memory(data)
     
-    def _get_request_data(self, limit: int = MAX_REQUEST_ITEMS) -> list[dict[str, Any]] | None:
+    def _get_request_data(self, limit: int = None) -> list[dict[str, Any]] | None:
         """Gets data from Redis or memory fallback."""
+        # We can ignore limit since cleanup ensures we never have too many entries
         if self.redis:
-            return self._get_requests_from_redis(REQUEST_PREFIX, limit)
+            return self._get_requests_from_redis(REQUEST_PREFIX)
         else:
-            return self._get_requests_from_memory(limit)
+            return self._get_requests_from_memory()
     
     def add_user(self, username: str, password: str) -> None:
         """Adds user to Redis or memory fallback"""
@@ -72,9 +74,11 @@ class Upstash:
     def _save_request_data_to_redis(self, data: dict[str, Any]) -> None:
         """Saves data to Redis."""
         try:
-            key = f"{REQUEST_PREFIX}:{datetime.now().isoformat()}"
+            # Get current time in CET
+            cet = pytz.timezone('Europe/Amsterdam')
+            cet_time = datetime.now(cet)
+            key = f"{REQUEST_PREFIX}{cet_time.isoformat()}"
             self.redis.set(key, json.dumps(data))
-            # self.redis.expire(key, REDIS_EXPIRATION_DURATION)
             self._cleanup_old_redis_entries(REQUEST_PREFIX)
 
         except Exception as e:
@@ -87,21 +91,20 @@ class Upstash:
         if len(self.requests_memory) > KEEP_LAST_N_ENTRIES:
             self.requests_memory = self.requests_memory[KEEP_LAST_N_ENTRIES//2:]
     
-    def _get_requests_from_redis(self, key_prefix: str, limit: int = None) -> list[dict[str, Any]] | None:
+    def _get_requests_from_redis(self, key_prefix: str) -> list[dict[str, Any]] | None:
         """Gets data from Redis, sorted by timestamp."""
         try:
-            # Get all keys
-            keys = self.redis.keys(f"{key_prefix}:*")
+            # Get all keys (we know it won't be more than KEEP_LAST_N_ENTRIES)
+            keys = self.redis.keys(f"{key_prefix}*")
             if not keys:
                 return None
             
-            # Sort keys
+            # Sort keys newest first
             sorted_keys = sorted(keys, reverse=True)
-            if limit:
-                sorted_keys = sorted_keys[:limit]
             
-            # Get all values
+            # Get all values at once
             values = self.redis.mget(*sorted_keys)
+            
             # Process results
             data_list = []
             for value in values:
@@ -112,15 +115,13 @@ class Upstash:
         
         except Exception as e:
             logger.error(f"Error fetching from Redis: {e}")
-            return self._get_requests_from_memory(limit)
+            return self._get_requests_from_memory()
     
-    def _get_requests_from_memory(self, limit: int) -> list[dict[str, Any]] | None:
+    def _get_requests_from_memory(self) -> list[dict[str, Any]] | None:
         """Gets data from memory storage"""
         if not self.requests_memory:
             return None
-        # Reverse the slice to get newest first
-        memory_data = list(reversed(self.requests_memory))
-        return memory_data[:limit] if limit else memory_data
+        return list(reversed(self.requests_memory))  # newest first
     
     def _get_user_from_redis(self, username: str) -> str | None:
         """Gets user from Redis"""
@@ -157,7 +158,7 @@ class Upstash:
     def _cleanup_old_redis_entries(self, key_prefix: str) -> None:
         """Cleans up old Redis entries"""
         try:
-            keys = self.redis.keys(f"{key_prefix}:*")
+            keys = self.redis.keys(f"{key_prefix}*")
             if len(keys) > KEEP_LAST_N_ENTRIES:
                 sorted_keys = sorted(keys)
                 keys_to_delete = sorted_keys[:-KEEP_LAST_N_ENTRIES//2]
@@ -166,6 +167,20 @@ class Upstash:
         
         except Exception as e:
             logger.error(f"Error during Redis cleanup: {e}")
+    
+    def clear_request_data(self) -> None:
+        """Clears request data from Redis"""
+        try:
+            keys = self.redis.keys(f"{REQUEST_PREFIX}*")
+            if keys:
+                removed_count = self.redis.delete(*keys)
+                logger.info(f"Cleared {removed_count} request entries from Redis")
+            
+            self.requests_memory = []
+            
+        except Exception as e:
+            logger.error(f"Error clearing request data: {e}")
+    
     
     def get_connection_status(self) -> dict[str, Any]:
         """Gets current storage connection status"""

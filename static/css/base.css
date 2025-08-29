@@ -16,6 +16,16 @@ main {
     font-size: 32px;
 }
 
+.flash-wrapper {
+    margin-bottom: 20px;
+    text-align: center;
+    font-style: italic;
+}
+
+.flash-text {
+    font-size: 1.2rem;
+}
+
 .footer {
     display: flex;
     justify-content: center;

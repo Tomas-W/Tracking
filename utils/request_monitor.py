@@ -1,3 +1,4 @@
+import pytz
 import requests
 
 from dataclasses import dataclass
@@ -163,8 +164,12 @@ class RequestMonitor:
         geo_data = self.context.get_geolocation(ip_address)
         device_info = self.context.get_device_info()
         
+        cet = pytz.timezone('Europe/Amsterdam')
+        cet_time = datetime.now(cet)
+        cet_strftime = cet_time.strftime("%Y-%m-%d @ %H:%M")
+        
         return {
-            "timestamp": datetime.now().strftime("%Y-%m-%d @ %H:%M:%S"),
+            "timestamp": cet_strftime,
             "ip_address": ip_address,
             "geo_data": geo_data.to_dict(),
             "device_info": device_info.to_dict(),
