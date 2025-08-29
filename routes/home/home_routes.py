@@ -22,8 +22,6 @@ CACHE_DURATION: Final = 3600
 @login_required
 def home():
     """Displays empty page."""
-    request_monitor.monitor()
-
     return render_template(
         CFG.template.home,
     )

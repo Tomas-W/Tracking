@@ -96,7 +96,7 @@ class Upstash:
                 return None
             
             # Sort keys
-            sorted_keys = sorted(keys)
+            sorted_keys = sorted(keys, reverse=True)
             if limit:
                 sorted_keys = sorted_keys[:limit]
             
