@@ -9,7 +9,10 @@
 {% endblock %}
 
   <div class="weight-graph">
-    <p class="weight-graph-title">{{ title }}</p>
+    <div class="header-wrapper">
+      <p class="header">{{ title }}</p>
+    </div>
+
     <picture>
       <source media="(min-width: 768px)" srcset="{{ url_for('static', filename=path_l) }}">
       <source media="(max-width: 767px)" srcset="{{ url_for('static', filename=path_s) }}">

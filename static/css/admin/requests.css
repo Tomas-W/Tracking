@@ -1,50 +1,17 @@
-body {
-    margin: 0;
-    padding: 0;
-    font-family: var(--system-font);
-    line-height: 1.6;
-    color: var(--text-white);
-    background-color: var(--black);
-}
-
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
-    border-radius: 5px;
-    background: transparent;
 }
 
-h1 {
-    border-bottom: 1px solid rgba(190, 190, 190, 0.2);
-    padding-bottom: 10px;
-    color: var(--text-white);
-    text-align: center;
+.tracking-content {
+    padding: 0 50px;
+    position: relative;
 }
+
 
 table {
-    position: relative;
     width: 100%;
-    margin: 20px 0;
-    overflow: visible;
-    border-radius: 5px;
-    border-collapse: separate;
     border-spacing: 0;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-    background: rgba(14, 13, 13, 0.7);
-}
-
-table thead {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 185px;
-    background-color: rgba(14, 13, 13, 0.7);
-    z-index: 20;
-}
-
-table thead tr {
-    display: table-row;
-    width: 100%;
 }
 
 th, td {
@@ -54,41 +21,18 @@ th, td {
 }
 
 th {
-    position: sticky;
-    top: 185px;
     font-weight: bold;
-    color: var(--text-white);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    background-color: rgba(30, 30, 30, 0.8);
-}
-
-thead tr th:first-child {
-    border-top-left-radius: 5px;
-}
-
-thead tr th:last-child {
-    border-top-right-radius: 5px;
+    background-color: var(--white-highlighted);
 }
 
 tr:hover {
-    background-color: rgba(40, 40, 40, 0.6);
-}
-
-.error {
-    margin-bottom: 20px;
-    padding: 15px;
-    border: 1px solid rgba(255, 107, 107, 0.3);
-    border-radius: 4px;
-    color: #ff6b6b;
-    background-color: rgba(255, 107, 107, 0.1);
+    background-color: var(--white-highlighted);
 }
 
 .details-btn {
     padding: 8px 15px;
     border: none;
-    border-radius: 3px;
-    color: var(--text-white);
-    background: rgba(76, 175, 80, 0.8);
+    background: var(--green);
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -107,7 +51,7 @@ tr:hover {
     height: 100%;
     overflow: auto;
     z-index: 1000;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: var(--muted);
 }
 
 .modal-content {
@@ -115,10 +59,10 @@ tr:hover {
     width: 80%;
     margin: 15% auto;
     padding: 25px;
-    border: 1px solid rgba(190, 190, 190, 0.2);
+    border: 1px solid var(--text-unhovered);
     border-radius: 5px;
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
-    background-color: var(--black);
+    background-color: var(--black-100);
 }
 
 .close {
@@ -141,8 +85,7 @@ pre {
     border-radius: 5px;
     overflow-x: auto;
     color: var(--text-white);
-    border: 1px solid rgba(190, 190, 190, 0.1);
-    background: rgba(30, 30, 30, 0.6);
+    border: 1px solid var(--seperator);
 }
 
 .no-data {
@@ -152,31 +95,23 @@ pre {
     color: var(--text-unhovered);
 }
 
-.tracking-content {
-    padding: 30px;
-    position: relative;
+
+
+@media (max-width: 768px) {
+    .tracking-content {
+        padding: 0 15px;
+    }
+    .unimportant,
+    .super-unimportant {
+        display: none;
+    }
 }
 
-.tracking-content::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: -1;
-}
-
-/* Fade effects */
-.fade-up {
-    width: 100%;
-    height: 100px;
-    background: linear-gradient(to bottom, var(--black) 0%, transparent 100%);
-}
-
-.fade-down {
-    width: 100%;
-    height: 100px;
-    background: linear-gradient(to bottom, transparent 0%, var(--black) 100%);
+@media (min-width: 768px) and (max-width: 992px) {
+    .tracking-content {
+        padding: 0 35px;
+    }
+    .super-unimportant {
+        display: none;
+    }
 }

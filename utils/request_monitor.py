@@ -11,7 +11,6 @@ from utils.upstash import upstash
 
 GEOLOCATION_API_URL = "http://ip-api.com/json"
 GEOLOCATION_CACHE_DURATION = 3600
-MAX_REQUEST_ITEMS = 100
 
 
 class RequestContext:
@@ -120,9 +119,9 @@ class RequestMonitor():
             "referrer": request.referrer
         }
     
-    def get_request_data(self, limit: int = MAX_REQUEST_ITEMS) -> List[Dict[str, Any]]:
+    def get_request_data(self) -> List[Dict[str, Any]] | None:
         """Gets stored request data."""
-        return self.storage.get_request_data(limit)
+        return self.storage._get_request_data()
     
     def get_storage_status(self) -> Dict[str, Any]:
         """Gets current storage connection status."""

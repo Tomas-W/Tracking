@@ -6,41 +6,11 @@
     --text-white: #bebebe;
     --text-unhovered: #616161;
     --text-hovered: #ffffff;
+    --seperator: rgba(190, 190, 190, 0.2);
+    --muted: rgba(0, 0, 0, 0.7);
     --red: rgba(138, 0, 0, 0.7);
     --green: rgba(20, 90, 0, 0.7);
     --transparent: rgba(0, 0, 0, 0);
-
-    --gradient-buy:
-        var(--bg-gradient) 450px, 
-        var(--bg-gradient) 700px,
-        transparent 700px, 
-        transparent 750px,
-        var(--bg-gradient) 750px, 
-        var(--bg-gradient) 900px;
-    
-    --gradient-roadmap:
-        var(--bg-gradient) 0px, 
-        var(--bg-gradient) 175px,
-        transparent 175px, 
-        transparent 225px,
-        var(--bg-gradient) 225px, 
-        var(--bg-gradient) 450px,
-        transparent 450px, 
-        transparent 500px,
-        var(--bg-gradient) 500px, 
-        var(--bg-gradient) 750px;
-
-    --gradient-tokenomics:
-        var(--bg-gradient) 0px, 
-        var(--bg-gradient) 350px,
-        transparent 350px, 
-        transparent 450px,
-        var(--bg-gradient) 450px, 
-        var(--bg-gradient) 700px,
-        transparent 700px, 
-        transparent 750px,
-        var(--bg-gradient) 750px, 
-        var(--bg-gradient) 900px;
 }
 
 a {

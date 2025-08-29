@@ -8,6 +8,7 @@ from flask import (
     url_for,
 )
 
+from utils.upstash import upstash
 from utils.request_monitor import request_monitor
 from .landing_utils import LoginForm
 
@@ -22,7 +23,15 @@ def landing():
     login_form = LoginForm()
     if request.method == "POST":
         if login_form.validate_on_submit():
-            return redirect(url_for("home.home"))
+            username = login_form.username.data
+            password = login_form.password.data
+            user = upstash.get_user(username)
+            if user is not None and user == password:
+                session["username"] = username
+                next_url = request.args.get("next")
+                return redirect(next_url or url_for("home.home"))
+            else:
+                flash("Incorrect credentials")
         
         else:
             session["form_errors"] = login_form.errors

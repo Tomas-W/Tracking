@@ -6,12 +6,10 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/requests.css') }}">
 {% endblock %}
 
-    <div class="container" id="tracking-section">
-        <h1>{{ title }}</h1>
-        
-        {% if error %}
-        <div class="error">{{ error }}</div>
-        {% endif %}
+<div class="header-wrapper">
+    <p class="header">Requests</p>
+</div>
+    <div class="container">
         
         {% if tracking_data %}
         <div class="tracking-content">
@@ -20,11 +18,11 @@
                 <thead>
                     <tr>
                         <th>Time</th>
-                        <th>Route</th>
-                        <th>IP Address</th>
+                        <th class="unimportant">Route</th>
+                        <th class="super-unimportant">IP Address</th>
                         <th>Country</th>
-                        <th>Device</th>
-                        <th>Browser</th>
+                        <th class="super-unimportant">Device</th>
+                        <th class="super-unimportant">Browser</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -32,11 +30,11 @@
                     {% for entry in tracking_data %}
                     <tr>
                         <td>{{ entry.timestamp }}</td>
-                        <td>{{ entry.route }}</td>
-                        <td>{{ entry.ip_address }}</td>
+                        <td class="unimportant">{{ entry.route }}</td>
+                        <td class="super-unimportant">{{ entry.ip_address }}</td>
                         <td>{{ entry.geo_data.country }} ({{ entry.geo_data.country_code }})</td>
-                        <td>{% if entry.device_info %}{{ entry.device_info.device }}{% else %}Unknown{% endif %}</td>
-                        <td>{% if entry.device_info %}{{ entry.device_info.browser }}{% else %}Unknown{% endif %}</td>
+                        <td class="super-unimportant">{% if entry.device_info %}{{ entry.device_info.device }}{% else %}Unknown{% endif %}</td>
+                        <td class="super-unimportant">{% if entry.device_info %}{{ entry.device_info.browser }}{% else %}Unknown{% endif %}</td>
                         <td>
                             <button class="details-btn" onclick="showDetails('{{ loop.index }}')">Details</button>
                         </td>
@@ -80,29 +78,6 @@
                     modal.style.display = "none";
                 }
             }
-
-            // Add tracking section to the list of sections to be progressively loaded
-            document.addEventListener("DOMContentLoaded", function() {
-                // Load tracking CSS
-                const loadCSS = function(href) {
-                    return new Promise((resolve) => {
-                        const link = document.createElement("link");
-                        link.rel = "stylesheet";
-                        link.href = href;
-                        link.onload = () => resolve();
-                        document.head.appendChild(link);
-                    });
-                };
-
-                // Load tracking CSS file
-                loadCSS("/static/css/tracking.css").then(() => {
-                    // Show tracking section after its styles are loaded
-                    const trackingSection = document.getElementById("tracking-section");
-                    if (trackingSection) {
-                        trackingSection.classList.add("loaded");
-                    }
-                });
-            });
         </script>
         {% else %}
         <div class="tracking-content">

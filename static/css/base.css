@@ -1,3 +1,21 @@
+main {
+    min-height: calc(100vh - 250px);
+}
+
+.header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 95vw;
+    padding-bottom: 10px;
+    margin: 40px auto;
+    border-bottom: 1px solid var(--seperator);
+}
+
+.header {
+    font-size: 32px;
+}
+
 .footer {
     display: flex;
     justify-content: center;

@@ -3,14 +3,18 @@ from flask import (
     render_template,
 )
 
+from app import cache
 from utils.request_monitor import request_monitor
 from .home_utils import get_2025_weight_dict
+from utils.misc import login_required
 
 
 home_bp = Blueprint("home", __name__)
+CACHE_DURATION = 3600
 
 
 @home_bp.route("/home", methods=["GET"])
+@login_required
 def home():
     request_monitor.monitor()
     return render_template(
@@ -20,6 +24,8 @@ def home():
 
 @home_bp.route("/weight", methods=["GET"])
 @home_bp.route("/weight/<month>", methods=["GET"])
+@login_required
+@cache.cached(timeout=CACHE_DURATION)
 def weight(month=None):
     request_monitor.monitor()
     # Use a relative path for the image

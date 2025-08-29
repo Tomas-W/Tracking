@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+{% block scripts %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/add_user.css') }}">
+    <script defer src="{{ url_for('static', filename='js/add_user.js') }}"></script>
+{% endblock %}
+
+<div class="add-user-form-wrapper">
+
+    <div class="header-wrapper">
+        <p class="header">Add User</p>
+    </div>
+
+            {% if get_flashed_messages() %}
+                <div class="add-user-flash">
+                    <p>{{ get_flashed_messages()[0] }}</p>
+                </div>
+            {% endif %}
+
+            <form method="POST" action="" novalidate class="add-user-form">
+
+                <div class="form-item">
+                    <div class="input-error-wrapper">
+                        {{ add_user_form.username(class="form-input-field") }}
+                        {% if add_user_form.errors["username"] %}
+                            <div class="form-error">{{ add_user_form.errors["username"][0] }}</div>
+                        {% endif %}
+                        <div class="form-label">{{ add_user_form.username.label(class="form-label-color") }}</div>
+                    </div>
+                </div>
+
+                <div class="form-item last-form-item">
+                    <div class="input-error-wrapper">
+                        {{ add_user_form.password(class="form-input-field ") }}
+                        {% if add_user_form.errors["password"] %}
+                            <div class="form-error">{{ add_user_form.errors["password"][0] }}</div>
+                        {% endif %}
+                        <div class="form-label">{{ add_user_form.password.label(class="form-label-color") }}</div>
+                    </div>
+                </div>
+
+                {{ add_user_form.form_type }}
+                {{ add_user_form.hidden_tag() }}
+                <div class="form-devider"> 
+                    {{ add_user_form.submit(class="form-btn") }}
+                </div>
+            </form>
+
+</div>
+
+{% endblock %}

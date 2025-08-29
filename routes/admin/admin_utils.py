@@ -1,23 +1,22 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FloatField, HiddenField, SubmitField
-from wtforms.validators import DataRequired, NumberRange
+from wtforms import StringField, HiddenField, SubmitField
+from wtforms.validators import DataRequired
 
 
-class WeightForm(FlaskForm):
-    date = StringField(
-        label="Date",
-        render_kw={"placeholder": "Date"},
+class AddUserForm(FlaskForm):
+    username = StringField(
+        label="Username",
+        render_kw={"placeholder": "Username"},
         validators=[
-            DataRequired(message="Date is required"),
+            DataRequired(message="Username is required"),
         ]
     )
-    weight = FloatField(
-        label="Weight",
-        render_kw={"placeholder": "Weight"},
+    password = StringField(
+        label="Password",
+        render_kw={"placeholder": "Password"},
         validators=[
-            DataRequired(message="Weight is required"),
-            NumberRange(min=0, message="Must be positive"),
+            DataRequired(message="Password is required"),
         ],
     )
-    form_type = HiddenField(default="weight")
-    submit = SubmitField(label="Submit")
+    form_type = HiddenField(default="add_user")
+    submit = SubmitField(label="Add")

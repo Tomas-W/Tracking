@@ -1,14 +1,10 @@
 nav {
     padding: 35px 0;
     text-align: center;
-    background: var(--black);
-    z-index: 100;
 }
 
 nav ul {
     list-style: none;
-    padding: 0;
-    margin: 0;
 }
 
 nav li {

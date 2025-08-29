@@ -42,4 +42,8 @@
     </div>
 </div>
 
+{% block scripts %}
+<script defer src="{{ url_for('static', filename='js/landing.js') }}"></script>
+{% endblock %}
+
 {% endblock %}
