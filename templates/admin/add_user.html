@@ -31,13 +31,23 @@
                     </div>
                 </div>
 
-                <div class="form-item last-form-item">
+                <div class="form-item">
                     <div class="input-error-wrapper">
                         {{ add_user_form.password(class="form-input-field ") }}
                         {% if add_user_form.errors["password"] %}
                             <div class="form-error">{{ add_user_form.errors["password"][0] }}</div>
                         {% endif %}
                         <div class="form-label">{{ add_user_form.password.label(class="form-label-color") }}</div>
+                    </div>
+                </div>
+
+                <div class="form-item last-form-item">
+                    <div class="input-error-wrapper">
+                        {{ add_user_form.password2(class="form-input-field ") }}
+                        {% if add_user_form.errors["password2"] %}
+                        <div class="form-error">{{ add_user_form.errors["password2"][0] }}</div>
+                        {% endif %}
+                        <div class="form-label">{{ add_user_form.password2.label(class="form-label-color") }}</div>
                     </div>
                 </div>
 

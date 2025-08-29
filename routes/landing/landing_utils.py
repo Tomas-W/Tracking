@@ -1,6 +1,18 @@
+from flask import session
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, HiddenField, SubmitField
+from wtforms import (
+    StringField,
+    PasswordField,
+    BooleanField,
+    HiddenField,
+    SubmitField,
+)
 from wtforms.validators import DataRequired
+
+
+def login_user(username: str) -> None:
+    """Adds username to session."""
+    session["username"] = username
 
 
 class LoginForm(FlaskForm):

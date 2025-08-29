@@ -1,16 +1,25 @@
-class Config:
+from dataclasses import dataclass
+
+
+@dataclass
+class Server:
     # Limiter
-    LIMITER_STORAGE_URI = "memory://"
-    LIMITER_DEFAULT_LIMITS = ["1800 per day", "600 per hour", "200 per minute"]
+    LIMITER_STORAGE_URI: str = "memory://"
+    LIMITER_DEFAULT_LIMITS: list[str] = None
     # Cache
-    CACHE_TYPE = "SimpleCache"
-    CACHE_DEFAULT_TIMEOUT = 300  # 5 minutes
-    # Caching
+    CACHE_TYPE: str = "SimpleCache"
+    CACHE_DEFAULT_TIMEOUT: int = 300
     STATIC_CACHE_DURATION = 3600 * 24 * 7  # 7 days
-    API_CACHE_DURATION = 3600  # 1 hour
-    VIEW_CACHE_DURATION = 60  # 60 seconds
+    API_CACHE_DURATION = 3600
     # Security headers
-    SECURITY_HEADERS = {
+    SECURITY_HEADERS: dict[str, str] = None
+
+    def __post_init__(self):
+        if self.LIMITER_DEFAULT_LIMITS is None:
+            self.LIMITER_DEFAULT_LIMITS = ["300 per day", "100 per hour", "20 per minute"]
+        
+        if self.SECURITY_HEADERS is None:
+            self.SECURITY_HEADERS = {
         # Prevents MIME type sniffing
         "X-Content-Type-Options": "nosniff",
         # Controls how the site can be framed - protects against clickjacking
@@ -55,6 +64,50 @@ class Config:
         "Cross-Origin-Embedder-Policy": "require-corp",
         "Cross-Origin-Resource-Policy": "same-origin"
     }
+
+
+@dataclass
+class Routes:
+    landing: str = "/"
+    home: str = "/home"
+    weight: str = "/weight"
+    requests: str = "/admin/requests"
+    add_user: str = "/admin/add-user"
+
+
+@dataclass
+class Templates:
+    landing: str = "landing/landing.html"
+    home: str = "home/home.html"
+    weight: str = "home/weight.html"
+    requests: str = "admin/requests.html"
+    add_user: str = "admin/add_user.html"
+
+
+@dataclass
+class Redirects:
+    landing: str = "landing.landing"
+    home: str = "home.home"
+    requests: str = "admin.requests"
+    add_user: str = "admin.add_user"
+
+
+@dataclass
+class Config:
+    server: Server = None
+    route: Routes = None
+    template: Templates = None
+    redirect: Redirects = None
+
+    def __post_init__(self):
+        if self.server is None:
+            self.server = Server()
+        if self.route is None:
+            self.route = Routes()
+        if self.template is None:
+            self.template = Templates()
+        if self.redirect is None:
+            self.redirect = Redirects()
 
 
 CFG = Config()

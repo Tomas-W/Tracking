@@ -2,24 +2,28 @@ import json
 import os
 
 from datetime import datetime
-from typing import Dict, Any, List
+from typing import Any, Final
 from upstash_redis import Redis
 
+from utils.logger import logger
 
-REDIS_EXPIRATION_DURATION = 30 * 24 * 3600  # 30 days in seconds
-KEEP_LAST_N_ENTRIES = 200
-MAX_REQUEST_ITEMS = 100
-REQUEST_PREFIX = "requests_"
-USERS_PREFIX = "users_"
+
+REDIS_EXPIRATION_DURATION: Final = 30 * 24 * 3600  # 30 days in seconds
+KEEP_LAST_N_ENTRIES: Final = 200
+MAX_REQUEST_ITEMS: Final = 100
+REQUEST_PREFIX: Final = "requests_"
+USERS_PREFIX: Final = "users_"
 
 
 class Upstash:
     """Handles all data storage operations."""
     def __init__(self):
         self.redis: Redis = None
-        self.requests_memory: List[Dict[str, Any]] = []
-        self.users_memory: Dict[str, Dict[str, str]] = {"admin": "admin"}
+        self.requests_memory: list[dict[str, Any]] = []
+        self.users_memory: dict[str, dict[str, str]] = {}
         self._init_redis()
+        if self.redis is None:
+            self.users_memory = {"test": "test"}
     
     def _init_redis(self) -> None:
         """Initializes Redis client if environment variables are available."""
@@ -29,107 +33,142 @@ class Upstash:
         if redis_url and redis_token:
             try:
                 self.redis = Redis(url=redis_url, token=redis_token)
-                print("Connected to Upstash Redis")
+                logger.info("Connected to Upstash Redis")
             
             except Exception as e:
-                print(f"Failed to connect to Upstash Redis: {e}")
+                logger.error(f"Failed to connect to Upstash Redis: {e}")
                 self.redis = None
         else:
-            print("No Redis credentials found, using in-memory storage")
+            logger.info("No Redis credentials found, using in-memory storage")
     
-    def save_request_data(self, data: Dict[str, Any], duration: bool = False) -> None:
+    def _save_request_data(self, data: dict[str, Any]) -> None:
         """Saves data to Redis or memory fallback."""
         if self.redis:
-            try:
-                key = f"{REQUEST_PREFIX}:{datetime.now().isoformat()}"
-                self.redis.set(key, json.dumps(data))
-                if duration:
-                    self.redis.expire(key, REDIS_EXPIRATION_DURATION)
-                    self._cleanup_old_redis_entries(REQUEST_PREFIX)
-                print(f"Saved data to Redis: {key}")
-            
-            except Exception as e:
-                print(f"Error saving to Redis: {e}")
-                self.requests_memory.append(data)
-        
+            self._save_request_data_to_redis(data)
         else:
-            self.requests_memory.append(data)
-            if len(self.requests_memory) > KEEP_LAST_N_ENTRIES:
-                self.requests_memory = self.requests_memory[KEEP_LAST_N_ENTRIES//2:]
-            print("Saved data to memory storage")
-        
-    def _get_request_data(self, limit: int = MAX_REQUEST_ITEMS) -> List[Dict[str, Any]] | None:
+            self._save_request_data_to_memory(data)
+    
+    def _get_request_data(self, limit: int = MAX_REQUEST_ITEMS) -> list[dict[str, Any]] | None:
         """Gets data from Redis or memory fallback."""
         if self.redis:
-            return self._get_from_redis(REQUEST_PREFIX, limit)
+            return self._get_requests_from_redis(REQUEST_PREFIX, limit)
         else:
             return self._get_requests_from_memory(limit)
     
-    def _get_requests_from_memory(self, limit: int) -> List[Dict[str, Any]] | None:
-        """Get data from memory storage"""
-        return self.requests_memory[-limit:] if self.requests_memory else None
+    def add_user(self, username: str, password: str) -> None:
+        """Adds user to Redis or memory fallback"""
+        if self.redis:
+            self._add_user_to_redis(username, password)
+        else:
+            self._add_user_to_memory(username, password)
     
     def get_user(self, username: str) -> str | None:
-        """Get user from Redis or memory fallback"""
+        """Gets user from Redis or memory fallback"""
         if self.redis:
-            return self._get_from_redis(f"{USERS_PREFIX}{username}", 1)
+            return self._get_user_from_redis(username)
         else:
             return self._get_user_from_memory(username)
     
-    def _get_user_from_memory(self, username: str) -> str | None:
-        """Get users from memory storage"""
+    def _save_request_data_to_redis(self, data: dict[str, Any]) -> None:
+        """Saves data to Redis."""
         try:
-            return self.users_memory[username]
-        except KeyError:
-            return None
-    
-    def add_user(self, username: str, password: str) -> None:
-        """Add user to memory storage"""
-        if self.redis:
-            self.redis.set(f"{USERS_PREFIX}{username}", password)
-        else:
-            self.users_memory[username] = password
+            key = f"{REQUEST_PREFIX}:{datetime.now().isoformat()}"
+            self.redis.set(key, json.dumps(data))
+            # self.redis.expire(key, REDIS_EXPIRATION_DURATION)
+            self._cleanup_old_redis_entries(REQUEST_PREFIX)
 
-    def _get_from_redis(self, key_prefix: str, limit: int = None) -> List[Dict[str, Any]] | None:
-        """Gets data from Redis."""
+        except Exception as e:
+            logger.error(f"Error saving to Redis: {e}")
+            self.requests_memory.append(data)
+    
+    def _save_request_data_to_memory(self, data: dict[str, Any]) -> None:
+        """Saves data to memory storage."""
+        self.requests_memory.append(data)
+        if len(self.requests_memory) > KEEP_LAST_N_ENTRIES:
+            self.requests_memory = self.requests_memory[KEEP_LAST_N_ENTRIES//2:]
+    
+    def _get_requests_from_redis(self, key_prefix: str, limit: int = None) -> list[dict[str, Any]] | None:
+        """Gets data from Redis, sorted by timestamp."""
         try:
+            # Get all keys
             keys = self.redis.keys(f"{key_prefix}:*")
-            if keys:
-                sorted_keys = sorted(keys)
-                if limit:
-                    sorted_keys = sorted_keys[-limit:]
-                
-                data_list = []
-                for key in sorted_keys:
-                    data = self.redis.get(key)
-                    if data:
-                        data_list.append(json.loads(data))
-                
-                return data_list
+            if not keys:
+                return None
             
-            print(f"No keys found for {key_prefix}")
-            return None
+            # Sort keys
+            sorted_keys = sorted(keys)
+            if limit:
+                sorted_keys = sorted_keys[:limit]
+            
+            # Get all values
+            values = self.redis.mget(*sorted_keys)
+            # Process results
+            data_list = []
+            for value in values:
+                if value:
+                    data_list.append(json.loads(value))
+            
+            return data_list
         
         except Exception as e:
-            print(f"Error fetching from Redis: {e}")
+            logger.error(f"Error fetching from Redis: {e}")
             return self._get_requests_from_memory(limit)
     
+    def _get_requests_from_memory(self, limit: int) -> list[dict[str, Any]] | None:
+        """Gets data from memory storage"""
+        if not self.requests_memory:
+            return None
+        # Reverse the slice to get newest first
+        memory_data = list(reversed(self.requests_memory))
+        return memory_data[:limit] if limit else memory_data
+    
+    def _get_user_from_redis(self, username: str) -> str | None:
+        """Gets user from Redis"""
+        try:
+            result = self.redis.get(f"{USERS_PREFIX}{username}")
+            return result
+        
+        except Exception as e:
+            logger.error(f"Error fetching user from Redis: {e}")
+            return self._get_user_from_memory(username)
+    
+    def _get_user_from_memory(self, username: str) -> str | None:
+        """Gets users from memory storage"""
+        try:
+            return self.users_memory[username]
+        
+        except Exception as e:
+            logger.error(f"Error fetching user from memory: {e}")
+            return None
+    
+    def _add_user_to_redis(self, username: str, password: str) -> None:
+        """Adds user to Redis"""
+        try:
+            self.redis.set(f"{USERS_PREFIX}{username}", password)
+        
+        except Exception as e:
+            logger.error(f"Error adding user to Redis: {e}")
+            self._add_user_to_memory(username, password)
+    
+    def _add_user_to_memory(self, username: str, password: str) -> None:
+        """Adds user to memory storage"""
+        self.users_memory[username] = password
+    
     def _cleanup_old_redis_entries(self, key_prefix: str) -> None:
-        """Clean up old Redis entries to prevent unlimited growth"""
+        """Cleans up old Redis entries"""
         try:
             keys = self.redis.keys(f"{key_prefix}:*")
             if len(keys) > KEEP_LAST_N_ENTRIES:
                 sorted_keys = sorted(keys)
                 keys_to_delete = sorted_keys[:-KEEP_LAST_N_ENTRIES//2]
-                for old_key in keys_to_delete:
-                    self.redis.delete(old_key)
-                print(f"Cleaned up {len(keys_to_delete)} old Redis entries")
+                removed_keys = self.redis.delete(*keys_to_delete)
+                logger.info(f"Cleaned up {removed_keys} old Redis entries")
         
         except Exception as e:
-            print(f"Error during Redis cleanup: {e}")
+            logger.error(f"Error during Redis cleanup: {e}")
     
-    def get_connection_status(self) -> Dict[str, Any]:
-        """Get current storage connection status"""
+    def get_connection_status(self) -> dict[str, Any]:
+        """Gets current storage connection status"""
         return {
             "redis_connected": self.redis is not None,
             "memory_entries": len(self.requests_memory),

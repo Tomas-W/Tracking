@@ -5,7 +5,6 @@ from wtforms.fields import Field
 from wtforms.validators import ValidationError
 
 
-
 class EmailCheck:
     def __init__(self) -> None:
         self.invalid_message: str = "Invalid email"

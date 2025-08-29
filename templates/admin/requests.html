@@ -22,7 +22,7 @@
                         <th class="super-unimportant">IP Address</th>
                         <th>Country</th>
                         <th class="super-unimportant">Device</th>
-                        <th class="super-unimportant">Browser</th>
+                        <th class="super-unimportant">OS</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -34,7 +34,7 @@
                         <td class="super-unimportant">{{ entry.ip_address }}</td>
                         <td>{{ entry.geo_data.country }} ({{ entry.geo_data.country_code }})</td>
                         <td class="super-unimportant">{% if entry.device_info %}{{ entry.device_info.device }}{% else %}Unknown{% endif %}</td>
-                        <td class="super-unimportant">{% if entry.device_info %}{{ entry.device_info.browser }}{% else %}Unknown{% endif %}</td>
+                        <td class="super-unimportant">{% if entry.device_info %}{{ entry.os }}{% else %}Unknown{% endif %}</td>
                         <td>
                             <button class="details-btn" onclick="showDetails('{{ loop.index }}')">Details</button>
                         </td>
