@@ -9,7 +9,7 @@ class Server:
     # Cache
     CACHE_TYPE: str = "SimpleCache"
     CACHE_DEFAULT_TIMEOUT: int = 300
-    STATIC_CACHE_DURATION = 3600 * 24 * 7  # 7 days
+    STATIC_CACHE_DURATION = 3600 * 24 * 7
     API_CACHE_DURATION = 3600
     # Security headers
     SECURITY_HEADERS: dict[str, str] = None
@@ -71,6 +71,7 @@ class Routes:
     landing: str = "/"
     home: str = "/home"
     weight: str = "/weight"
+    calories: str = "/calories"
     requests: str = "/admin/requests"
     add_user: str = "/admin/add-user"
 
@@ -79,7 +80,9 @@ class Routes:
 class Templates:
     landing: str = "landing/landing.html"
     home: str = "home/home.html"
+    graph: str = "home/graph.html"
     weight: str = "home/weight.html"
+    calories: str = "home/calories.html"
     requests: str = "admin/requests.html"
     add_user: str = "admin/add_user.html"
 
@@ -88,6 +91,8 @@ class Templates:
 class Redirects:
     landing: str = "landing.landing"
     home: str = "home.home"
+    weight: str = "home.weight"
+    calories: str = "home.calories"
     requests: str = "admin.requests"
     add_user: str = "admin.add_user"
 

@@ -1,4 +1,4 @@
-.weight-graph {
+.graph {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -7,7 +7,7 @@
     box-sizing: border-box;
 }
 
-.weight-graph-image {
+.graph-image {
     display: block;
     width: calc(100% - 40px);
     max-width: 1000px;
@@ -25,7 +25,7 @@
 }
 
 .show-all-button {
-    grid-column: 1 / -1;  /* Spans all columns */
+    grid-column: 1 / -1;
 }
 
 .month-button {
@@ -69,9 +69,6 @@
 
 
 @media (max-width: 425px) {
-    .weight-graph-title {
-        font-size: 18px;
-    }
     .month-grid {
         grid-template-columns: repeat(3, 1fr);
         grid-column-gap: 15px;
@@ -90,9 +87,6 @@
 }
 
 @media (min-width: 425px) and (max-width: 576px) {
-    .weight-graph-title {
-        font-size: 18px;
-    }
     .month-grid {
         grid-template-columns: repeat(3, 1fr);
         grid-column-gap: 15px;
